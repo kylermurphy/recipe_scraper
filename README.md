@@ -28,6 +28,32 @@ Or from GitHub:
 pip install git+https://github.com/yourusername/recipe_scraper.git
 ```
 
+## ⚠️ Instagram Limitations
+
+**Instagram actively blocks scraping requests.** When fetching Instagram posts, you may encounter:
+
+```
+401 Unauthorized - "Please wait a few minutes before you try again."
+429 Too Many Requests
+```
+
+**Solutions:**
+
+1. **Use Instagram credentials** (most reliable):
+   ```python
+   recipe = get_recipe_from_url(
+       "https://www.instagram.com/p/ABC123/",
+       instagram_username="your_username",
+       instagram_password="your_password"
+   )
+   ```
+
+2. **Wait a few minutes** before retrying (Instagram's rate-limit cooldown)
+
+3. **Use a VPN or different network** to avoid IP-based blocking
+
+4. **Use recipe websites instead** (recommended) — they don't have these restrictions
+
 ## Quick Start
 
 ### As a library
@@ -35,11 +61,15 @@ pip install git+https://github.com/yourusername/recipe_scraper.git
 ```python
 from recipe_scraper import get_recipe_from_url
 
-# Instagram post
-recipe = get_recipe_from_url("https://www.instagram.com/p/ABC123/")
-
-# Recipe website (tries JSON-LD first)
+# Recipe website (recommended — no Instagram blocking issues)
 recipe = get_recipe_from_url("https://cooking.nytimes.com/recipes/...")
+
+# Instagram post (requires credentials for reliability)
+recipe = get_recipe_from_url(
+    "https://www.instagram.com/p/ABC123/",
+    instagram_username="your_username",
+    instagram_password="your_password"
+)
 
 # Save as Jekyll markdown
 recipe.to_markdown("_recipes/")
