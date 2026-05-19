@@ -112,11 +112,14 @@ def get_recipe_from_url(
     if "instagram.com" in url:
         caption = fetch_instagram_caption(url, instagram_username, instagram_password)
         if ollama_url and ollama_model:
-            return parse_recipe_with_ollama(caption, ollama_url, ollama_model, ollama_timeout)
+            recipe = parse_recipe_with_ollama(caption, ollama_url, ollama_model, ollama_timeout)
         else:
-            return parse_recipe_from_text(caption)
+            recipe = parse_recipe_from_text(caption)
     else:
-        return fetch_website_recipe(url, ollama_url, ollama_model, ollama_timeout)
+        recipe =fetch_website_recipe(url, ollama_url, ollama_model, ollama_timeout)
+
+    recipe.src_url = url
+    return recipe
 
 
 def get_recipe_from_caption(
@@ -125,6 +128,7 @@ def get_recipe_from_caption(
     ollama_url: Optional[str] = None,
     ollama_model: Optional[str] = None,
     ollama_timeout: int = 120,
+    url: Optional[str] = None,
 ) -> Recipe:
     """
     Parse a recipe from raw text.
@@ -148,6 +152,9 @@ def get_recipe_from_caption(
     Recipe
     """
     if ollama_url and ollama_model:
-        return parse_recipe_with_ollama(caption, ollama_url, ollama_model, ollama_timeout)
+        recipe = parse_recipe_with_ollama(caption, ollama_url, ollama_model, ollama_timeout)
     else:
-        return parse_recipe_from_text(caption)
+        recipe = parse_recipe_from_text(caption)
+
+    recipe.src_url = url
+    return recipe

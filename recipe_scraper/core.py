@@ -28,6 +28,7 @@ class Recipe:
     cook_time: Optional[str] = None
     total_time: Optional[str] = None
     notes: Optional[str] = None
+    src_url: Optional[str] = None
 
     # Track where this recipe came from (for debugging/transparency)
     _source: Optional[str] = field(default=None, repr=False, compare=False)
@@ -36,6 +37,8 @@ class Recipe:
         """Compact, readable terminal view."""
         lines = [f"{'═' * 54}", f"  {self.title.upper()}", f"{'═' * 54}"]
 
+        if self.src_url:
+            lines.append(f"Source    : {self.src_url}")
         if self.tags:
             lines.append(f"Tags      : {', '.join(self.tags)}")
         if self.servings:
@@ -82,6 +85,7 @@ class Recipe:
                 f'prep_time: "{self.prep_time or ""}"',
                 f'cook_time: "{self.cook_time or ""}"',
                 f'total_time: "{self.total_time or ""}"',
+                f'src_url: "{self.src_url or ""}"',
                 "---",
             ]
         )
