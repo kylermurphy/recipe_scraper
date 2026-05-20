@@ -5,6 +5,7 @@ import pathlib
 import textwrap
 from dataclasses import asdict, dataclass, field
 from typing import Optional
+from urllib.parse import urlparse
 
 from .utils import escape_yaml
 
@@ -74,6 +75,14 @@ class Recipe:
         else:
             tags_block = "tags: []"
 
+        if self.src_url:
+            parsed_url = urlparse(self.src_url)
+            base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+            base_url = base_url.lower()
+        else:
+            base_url = None
+
+
         front_matter = "\n".join(
             [
                 "---",
@@ -86,6 +95,7 @@ class Recipe:
                 f'cook_time: "{self.cook_time or ""}"',
                 f'total_time: "{self.total_time or ""}"',
                 f'src_url: "{self.src_url or ""}"',
+                f'base_url: "{base_url or ""}"',
                 "---",
             ]
         )
